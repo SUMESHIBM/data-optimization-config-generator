@@ -1,52 +1,53 @@
-# Product Requirements Document: Data Usage Optimization UX Enhancement
-
-**Date:** February 3, 2026  
-**Meeting Duration:** 19m 20s  
-**Participants:** Sumesh Somarajan, Hubert Hesse, Akash Thampi, Emily Zhou, Tvisha Sharma
-
----
-
 ## Executive Summary
 
 This document outlines the requirements for improving the user experience around data usage optimization in Instana. The current process requires users to navigate complex documentation trees, manually configure YAML files, and apply changes across multiple agents without centralized management. This initiative aims to create a streamlined, contextual experience that connects transparency views directly to actionable optimization configurations.
 
----
+---------------------------------------------------------------------------
 
-## Problem Statement
+**Problem Statement**
 
-### Current State Issues
+1.	**Complex Navigation**: 
+Users must navigate through extensive tree-structured documentation to find relevant optimization information for their specific technology stack
+2.	**Disconnected Experience**: 
+The journey from identifying optimization opportunities (transparency view) to implementing solutions is fragmented across multiple interfaces and documentation pages
+3.	**Support Dependency**: 
+Many optimization requests are handled through support tickets due to the complexity of the current self-service experience
 
-1. **Complex Navigation**: Users must navigate through extensive tree-structured documentation to find relevant optimization information for their specific technology stack
-2. **Manual Configuration**: Users must manually create YAML configuration files by reading documentation, which often leads to misunderstandings
-3. **Decentralized Agent Management**: No central configuration management exists - users must SSH into each agent machine individually to apply configurations
-4. **Disconnected Experience**: The journey from identifying optimization opportunities (transparency view) to implementing solutions is fragmented across multiple interfaces and documentation pages
-5. **Support Dependency**: Many optimization requests are handled through support tickets due to the complexity of the current self-service experience
+OUT OF SCOPE
+4.	 **Manual Configuration**: 
+Users must manually create YAML configuration files by reading documentation, which often leads to misunderstandings
+5.	**Decentralized Agent Management**: 
+No central configuration management exists - users must SSH into each agent machine individually to apply configurations
 
-### Impact
 
-- High support ticket volume for optimization guidance
-- Time-consuming manual configuration across multiple agents
-- User confusion and misinterpretation of documentation
-- Delayed optimization implementation
-- Poor user experience leading to underutilization of optimization features
+**Impact**
+1.	High support ticket volume for optimization guidance
+2.	User confusion and misinterpretation of documentation
+3.	Delayed optimization implementation
+4.	Poor user experience leading to underutilization of optimization features
+5.	Out of scope: Time-consuming manual configuration across multiple agents
 
----
 
-## User Personas & Pain Points
+---------------------------------------------------------------------------
 
-### Persona 1: DevOps Engineer / Site Reliability Engineer
+
+User Personas & Pain Points
+
+Persona 1: DevOps Engineer / Site Reliability Engineer
 
 **Goals:**
-- Optimize data usage to stay within Fair Use Policy limits
-- Reduce monitoring costs without losing visibility
-- Quickly implement recommended optimizations
+a.	Optimize data usage to stay within Fair Use Policy limits
+b.	Reduce monitoring costs without losing visibility
+c.	Quickly implement recommended optimizations
+
 
 **Pain Points:**
-- "I see top contributors in the usage view, but I don't know which optimization applies to my specific technology stack (Java, JDBC, OpenTelemetry, etc.)"
-- "I have to read through extensive documentation to find the right YAML configuration for my service"
-- "I need to SSH into 20+ agent machines individually to apply the same configuration change"
-- "Sometimes I misunderstand the documentation and implement the wrong optimization"
-- "I have to wait for support tickets to get guidance on what optimizations are available"
+•	"I see top contributors in the usage view, but I don't know which optimization applies to my specific technology stack (Java, JDBC, OpenTelemetry, etc.)"
+•	"I have to read through extensive documentation to find the right YAML configuration for my service"
+•	"Sometimes I misunderstand the documentation and implement the wrong optimization"
+•	"I have to wait for support tickets to get guidance on what optimizations are available"
+•	OUT of scope: "I need to SSH into 20+ agent machines individually to apply the same configuration change"
+
 
 **Current Workflow:**
 1. View usage transparency dashboard
@@ -56,16 +57,21 @@ This document outlines the requirements for improving the user experience around
 5. Read and interpret documentation
 6. Manually create YAML configuration
 7. SSH into each agent machine
+OUT of scope:
 8. Apply configuration to each agent individually
 9. Restart each agent
 10. Verify changes (no clear verification process)
 
-### Persona 2: Platform Engineering Manager
+
+
+
+OUT of scope:
+Persona 2: Platform Engineering Manager
 
 **Goals:**
-- Ensure team stays within Fair Use Policy thresholds
-- Standardize optimization configurations across the organization
-- Minimize operational overhead
+a.	Ensure team stays within Fair Use Policy thresholds
+b.	Standardize optimization configurations across the organization
+c.	Minimize operational overhead
 
 **Pain Points:**
 - "I can't centrally manage agent configurations across my fleet"
@@ -73,30 +79,36 @@ This document outlines the requirements for improving the user experience around
 - "Rolling out configuration changes requires significant manual effort"
 - "I need to ensure consistency across all agents but have no central control"
 
----
 
-## Scope of Work
+---------------------------------------------------------------------------
 
-### Phase 1: Contextual Optimization Discovery (Primary Focus)
 
-#### 1.1 Smart Jump-Out from Transparency View
+**Scope of Work**
 
-**Description:** Create contextual links from the usage transparency view that automatically identify the user's technology stack and direct them to relevant optimization options.
+Phase 1: Contextual Optimization Discovery (Primary Focus)
 
-**Requirements:**
+1.1 Smart Jump-Out from Transparency View
+
+Description:
+Create contextual links from the usage transparency view that automatically identify the user's technology stack and direct them to relevant optimization options.
+
+Requirements:
 - Detect service technology stack (Java, JDBC, OpenTelemetry, Node.js, etc.)
 - Display technology-specific optimization shortcuts directly in the transparency view
 - Pre-filter optimization options based on detected technology
 - Provide direct links to configuration generator with pre-selected technology
 
-**User Story:**
+User Story:
 > "As a DevOps engineer viewing my top data contributors, I want to see optimization options specific to my service's technology stack, so that I can quickly identify relevant optimizations without navigating documentation."
 
-#### 1.2 Configuration Generator Enhancement
 
-**Description:** Enhance the existing JDBC configuration generator to support multiple technologies and provide a more intuitive interface.
 
-**Requirements:**
+1.2 Configuration Generator Enhancement
+
+Description:
+Enhance the existing JDBC configuration generator to support multiple technologies and provide a more intuitive interface.
+
+Requirements:
 - Extend configuration generator beyond JDBC to support other technologies
 - Accept URL parameters to pre-select technology and filters
 - Provide drag-and-drop or preset-based configuration building
@@ -104,42 +116,89 @@ This document outlines the requirements for improving the user experience around
 - Display "what you see is what you get" preview of configuration
 - Eliminate need to read extensive documentation
 
-**User Story:**
+User Story:
 > "As a DevOps engineer, I want to generate a YAML configuration file through an intuitive interface with presets, so that I don't have to manually read documentation and write configurations."
 
-#### 1.3 Optimization Catalog Integration
 
-**Description:** Create an in-product optimization catalog that replaces the current GitHub-based documentation tree.
 
-**Requirements:**
+1.3 Optimization Catalog Integration
+
+Description:
+Create an in-product optimization catalog that replaces the current GitHub-based documentation tree.
+
+Requirements:
 - Centralized, searchable optimization catalog within the product
 - Technology-based filtering and categorization
 - Clear indication of which optimizations are available vs. in development
 - Direct links from transparency view to relevant catalog entries
 - Reduced reliance on external documentation
 
-**User Story:**
+User Story:
 > "As a DevOps engineer, I want to browse available optimizations within the product interface, so that I can quickly find and understand what's available for my technology stack."
 
-### Phase 2: Agent Fleet Management Integration (Dependency)
 
-**Note:** Agent Fleet Management is being developed by the Agent team in 2026. This phase focuses on UX integration and cross-team collaboration.
+Acceptance Criteria
 
-#### 2.1 Cross-Team UX Coordination
+Phase 1: Contextual Optimization Discovery
 
-**Description:** Collaborate with Agent Fleet Management UX team to ensure seamless experience from optimization discovery to deployment.
+AC1: Technology-Specific Jump-Out
+- [ ] When viewing a service in the transparency/usage view, the system detects the service's technology stack
+- [ ] A contextual "Optimize" or similar action is displayed for services with available optimizations
+- [ ] Clicking the action navigates to the configuration generator with technology pre-selected
+- [ ] The configuration generator displays only relevant optimization options for the detected technology
+- [ ] Users can access the optimization catalog without leaving the product interface
 
-**Requirements:**
+AC2: Enhanced Configuration Generator
+- [ ] Configuration generator supports at least 3 technology types (starting with JDBC, expandable)
+- [ ] Users can select from preset optimization configurations
+- [ ] Users can customize configurations through an intuitive interface (drag-and-drop or form-based)
+- [ ] Generated YAML file is syntactically correct and ready to use
+- [ ] Users can preview the YAML before downloading/applying
+- [ ] Configuration generator accepts URL parameters for pre-selection (technology, filters)
+
+AC3: In-Product Optimization Catalog
+- [ ] Optimization catalog is accessible from the transparency view
+- [ ] Catalog can be filtered by technology type
+- [ ] Each optimization entry clearly indicates availability status (available, in development, planned)
+- [ ] Optimization descriptions are clear and include expected impact
+- [ ] Users can navigate from catalog entry to configuration generator
+- [ ] Catalog reduces need to access external GitHub documentation by 80%
+
+AC4: User Journey Improvement
+- [ ] Time from identifying optimization opportunity to generating configuration is reduced by 70%
+- [ ] Users can complete optimization configuration without reading external documentation
+- [ ] Support ticket volume for optimization guidance decreases by 50%
+- [ ] User testing shows 90% task completion rate for generating optimization configurations
+
+
+
+
+
+
+OUT of scope:
+Phase 2: Agent Fleet Management Integration (Dependency)
+
+Note: Agent Fleet Management is being developed by the Agent team in 2026. This phase focuses on UX integration and cross-team collaboration.
+
+2.1 Cross-Team UX Coordination
+
+Description:
+Collaborate with Agent Fleet Management UX team to ensure seamless experience from optimization discovery to deployment.
+
+Requirements:
 - Identify Agent Fleet Management UX team contact and PM (Heading)
 - Understand Agent Fleet Management roadmap and current progress
 - Design integration points between optimization configuration and fleet deployment
 - Ensure consistent user experience across both features
 
-#### 2.2 Configuration Deployment Experience
 
-**Description:** Design the end-to-end experience for deploying optimization configurations to agent fleets.
 
-**Requirements:**
+2.2 Configuration Deployment Experience
+
+Description:
+Design the end-to-end experience for deploying optimization configurations to agent fleets.
+
+Requirements:
 - Seamless handoff from configuration generator to fleet management
 - Ability to preview which agents will be affected
 - Bulk deployment capabilities
@@ -147,17 +206,40 @@ This document outlines the requirements for improving the user experience around
 - Status tracking for configuration deployment
 
 **User Story:**
-> "As a DevOps engineer, I want to deploy my optimization configuration to all relevant agents from a central interface, so that I don't have to SSH into each machine individually."
+"As a DevOps engineer, I want to deploy my optimization configuration to all relevant agents from a central interface, so that I don't have to SSH into each machine individually."
 
 ---
 
-## User Needs
+Acceptance Criteria
+
+Phase 2: Agent Fleet Management Integration
+
+#### AC5: Cross-Team Integration
+- [ ] Integration points with Agent Fleet Management are documented
+- [ ] UX designs are reviewed and approved by both teams
+- [ ] User flow from optimization configuration to deployment is seamless
+- [ ] No duplicate functionality between optimization and fleet management features
+
+#### AC6: Configuration Deployment (Dependent on Agent Fleet Management)
+- [ ] Users can deploy configurations to multiple agents from a central interface
+- [ ] Users can preview which agents will receive the configuration
+- [ ] Deployment status is visible in real-time
+- [ ] Users receive confirmation of successful deployment
+- [ ] Rollback capability exists for failed deployments
+
+---------------------------------------------------------------------------
+
+
+
+
+**User Needs**
 
 ### Functional Needs
 
 1. **Technology Detection**: Automatic identification of service technology stack
 2. **Contextual Guidance**: Technology-specific optimization recommendations
 3. **Configuration Generation**: Automated YAML file creation with presets
+OUT of scope:
 4. **Centralized Management**: Single interface for managing agent configurations
 5. **Bulk Operations**: Apply configurations to multiple agents simultaneously
 6. **Verification**: Clear feedback on configuration application success/failure
@@ -178,59 +260,10 @@ This document outlines the requirements for improving the user experience around
 4. **Prerequisites**: Requirements or dependencies for each optimization
 5. **Status**: Current configuration state across agent fleet
 
----
+---------------------------------------------------------------------------
 
-## Acceptance Criteria
 
-### Phase 1: Contextual Optimization Discovery
-
-#### AC1: Technology-Specific Jump-Out
-- [ ] When viewing a service in the transparency/usage view, the system detects the service's technology stack
-- [ ] A contextual "Optimize" or similar action is displayed for services with available optimizations
-- [ ] Clicking the action navigates to the configuration generator with technology pre-selected
-- [ ] The configuration generator displays only relevant optimization options for the detected technology
-- [ ] Users can access the optimization catalog without leaving the product interface
-
-#### AC2: Enhanced Configuration Generator
-- [ ] Configuration generator supports at least 3 technology types (starting with JDBC, expandable)
-- [ ] Users can select from preset optimization configurations
-- [ ] Users can customize configurations through an intuitive interface (drag-and-drop or form-based)
-- [ ] Generated YAML file is syntactically correct and ready to use
-- [ ] Users can preview the YAML before downloading/applying
-- [ ] Configuration generator accepts URL parameters for pre-selection (technology, filters)
-
-#### AC3: In-Product Optimization Catalog
-- [ ] Optimization catalog is accessible from the transparency view
-- [ ] Catalog can be filtered by technology type
-- [ ] Each optimization entry clearly indicates availability status (available, in development, planned)
-- [ ] Optimization descriptions are clear and include expected impact
-- [ ] Users can navigate from catalog entry to configuration generator
-- [ ] Catalog reduces need to access external GitHub documentation by 80%
-
-#### AC4: User Journey Improvement
-- [ ] Time from identifying optimization opportunity to generating configuration is reduced by 70%
-- [ ] Users can complete optimization configuration without reading external documentation
-- [ ] Support ticket volume for optimization guidance decreases by 50%
-- [ ] User testing shows 90% task completion rate for generating optimization configurations
-
-### Phase 2: Agent Fleet Management Integration
-
-#### AC5: Cross-Team Integration
-- [ ] Integration points with Agent Fleet Management are documented
-- [ ] UX designs are reviewed and approved by both teams
-- [ ] User flow from optimization configuration to deployment is seamless
-- [ ] No duplicate functionality between optimization and fleet management features
-
-#### AC6: Configuration Deployment (Dependent on Agent Fleet Management)
-- [ ] Users can deploy configurations to multiple agents from a central interface
-- [ ] Users can preview which agents will receive the configuration
-- [ ] Deployment status is visible in real-time
-- [ ] Users receive confirmation of successful deployment
-- [ ] Rollback capability exists for failed deployments
-
----
-
-## Success Metrics
+**Success Metrics**
 
 ### Primary Metrics
 - **Reduction in support tickets** related to optimization guidance: Target 50% decrease
@@ -244,9 +277,9 @@ This document outlines the requirements for improving the user experience around
 - **Documentation access reduction**: Target 80% reduction in external documentation visits
 - **Agent configuration time**: Target 90% reduction in time to configure multiple agents (post-fleet management)
 
----
+---------------------------------------------------------------------------
 
-## Dependencies & Constraints
+**Dependencies & Constraints**
 
 ### Dependencies
 1. **Agent Fleet Management**: Phase 2 depends on Agent Fleet Management feature development (2026 roadmap)
@@ -260,18 +293,13 @@ This document outlines the requirements for improving the user experience around
 3. **Backward Compatibility**: Must support existing agent configurations
 4. **Technology Coverage**: Initial release may not cover all technology stacks
 
-### Out of Scope
-- Development of new optimization algorithms (handled by sensor teams)
-- Agent Fleet Management core functionality (handled by Agent team)
-- Fair Use Policy threshold changes
-- Pricing or billing modifications
 
----
+---------------------------------------------------------------------------
 
 ## Research & Validation
 
-### Required Research Activities
-
+**Required Research Activities
+**
 1. **Customer Interview Analysis**
    - Review existing support tickets (coordinate with Mark from customer support team)
    - Analyze French client interview from January 2026
@@ -296,7 +324,7 @@ This document outlines the requirements for improving the user experience around
 - **Beta Testing**: Limited release to select customers before general availability
 - **Post-Launch Review**: Gather feedback after 30 days of general availability
 
----
+---------------------------------------------------------------------------
 
 ## Reference Materials
 
@@ -317,32 +345,9 @@ This document outlines the requirements for improving the user experience around
 - **UX Team**: Sumesh Somarajan, Emily Zhou, Tvisha Sharma
 - **Customer Support**: Mark
 
----
+---------------------------------------------------------------------------
 
-## Next Steps
 
-### Immediate Actions (Week 1-2)
-1. Review Fair Use Policy community materials and webinar recording
-2. Request support ticket exports from Mark (5 representative cases)
-3. Identify and contact Agent Fleet Management UX team and PM
-4. Review existing JDBC configuration generator implementation
-5. Create initial user journey maps for current vs. proposed experience
-
-### Short-term Actions (Week 3-6)
-1. Conduct user research sessions with customers
-2. Create low-fidelity wireframes for contextual jump-out and configuration generator
-3. Define integration points with Agent Fleet Management
-4. Develop prototype for usability testing
-5. Share designs with clients for feedback
-
-### Medium-term Actions (Week 7-12)
-1. Iterate on designs based on user feedback
-2. Create high-fidelity mockups and specifications
-3. Collaborate with engineering on technical feasibility
-4. Plan phased rollout approach
-5. Define success metrics and measurement plan
-
----
 
 ## Appendix
 
@@ -354,15 +359,8 @@ This document outlines the requirements for improving the user experience around
 - **Sensor**: Instana component that collects specific types of telemetry data
 - **YAML**: Configuration file format used by Instana agents
 
-### Meeting Attendees
-- **Sumesh Somarajan**: UX Lead
-- **Hubert Hesse**: Product Manager
-- **Akash Thampi**: Product Manager
-- **Emily Zhou**: UX Designer
-- **Tvisha Sharma**: Team Member
-
 ---
 
 **Document Version:** 1.0  
-**Last Updated:** February 9, 2026  
-**Next Review:** After initial user research completion
+
+<img width="451" height="684" alt="image" src="https://github.com/user-attachments/assets/f7081e3a-6776-4cc3-9df4-8372715162d3" />
