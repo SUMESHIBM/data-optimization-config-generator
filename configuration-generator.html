@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration Generator - Instana</title>
+    <link rel="stylesheet" href="https://unpkg.com/carbon-components@10.58.0/css/carbon-components.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: #161616;
+            color: #f4f4f4;
+        }
+
+        /* Header */
+        .bx--header {
+            background: #161616;
+            border-bottom: 1px solid #393939;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            height: 48px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 14px;
+            font-weight: 400;
+            color: #f4f4f4;
+            margin-left: 1rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 14px;
+            color: #c6c6c6;
+            margin-left: 2rem;
+        }
+
+        .breadcrumb a {
+            color: #78a9ff;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Layout */
+        .main-container {
+            display: flex;
+            height: calc(100vh - 48px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 256px;
+            background: #262626;
+            border-right: 1px solid #393939;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid #393939;
+        }
+
+        .sidebar-header h2 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #f4f4f4;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-header p {
+            font-size: 12px;
+            color: #c6c6c6;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 1rem;
+        }
+
+        .nav-section-title {
+            padding: 0.5rem 1rem;
+            font-size: 12px;
+            font-weight: 600;
+            color: #c6c6c6;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            padding: 0.75rem 1rem;
+            color: #c6c6c6;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background 0.1s;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background: #353535;
+            color: #f4f4f4;
+        }
+
+        .nav-item.active {
+            background: #393939;
+            color: #0f62fe;
+            border-left: 3px solid #0f62fe;
+        }
+
+        /* Main Content */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-header {
+            padding: 2rem;
+            border-bottom: 1px solid #393939;
+            background: #262626;
+        }
+
+        .content-header h1 {
+            font-size: 28px;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-header p {
+            font-size: 14px;
+            color: #c6c6c6;
+            line-height: 1.5;
+        }
+
+        .content-body {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        /* Info Banner */
+        .info-banner {
+            background: #0043ce;
+            border-left: 3px solid #0f62fe;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .info-banner-icon {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .info-banner-content p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #f4f4f4;
+        }
+
+        .info-banner-content a {
+            color: #78a9ff;
+            text-decoration: none;
+        }
+
+        .info-banner-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: #262626;
+            border: 1px solid #393939;
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #f4f4f4;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #c6c6c6;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-select,
+        .form-input {
+            width: 100%;
+            background: #161616;
+            border: none;
+            border-bottom: 1px solid #393939;
+            padding: 0.75rem;
+            color: #f4f4f4;
+            font-size: 14px;
+            font-family: 'IBM Plex Sans', sans-serif;
+        }
+
+        .form-select:focus,
+        .form-input:focus {
+            outline: none;
+            border-bottom-color: #0f62fe;
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: #8d8d8d;
+            margin-top: 0.5rem;
+        }
+
+        /* Filter Mode */
+        .filter-mode-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            font-size: 14px;
+            color: #f4f4f4;
+            cursor: pointer;
+        }
+
+        /* Preset Cards */
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .preset-card {
+            background: #353535;
+            border: 2px solid #525252;
+            border-radius: 4px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .preset-card:hover {
+            border-color: #0f62fe;
+            background: #393939;
+        }
+
+        .preset-card.selected {
+            border-color: #0f62fe;
+            background: #393939;
+            box-shadow: 0 0 0 2px #0f62fe;
+        }
+
+        .preset-card h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #f4f4f4;
+        }
+
+        .preset-card p {
+            font-size: 12px;
+            color: #c6c6c6;
+            line-height: 1.4;
+        }
+
+        .preset-badge {
+            display: inline-block;
+            background: #24a148;
+            color: #161616;
+            padding: 0.25rem 0.5rem;
+            border-radius: 2px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        /* Attribute Groups */
+        .attribute-groups {
+            margin-top: 1rem;
+        }
+
+        .attribute-group {
+            background: #353535;
+            border: 1px solid #525252;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .attribute-group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .attribute-group-header input {
+            background: #161616;
+            border: none;
+            border-bottom: 1px solid #393939;
+            padding: 0.5rem;
+            color: #f4f4f4;
+            font-size: 14px;
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .btn-icon {
+            background: transparent;
+            border: 1px solid #525252;
+            color: #c6c6c6;
+            padding: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.1s;
+        }
+
+        .btn-icon:hover {
+            background: #525252;
+            color: #f4f4f4;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr auto;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+            align-items: end;
+        }
+
+        .btn-add {
+            background: #0f62fe;
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1rem;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.1s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-add:hover {
+            background: #0353e9;
+        }
+
+        /* Configuration Output */
+        .config-output {
+            background: #262626;
+            border: 1px solid #393939;
+            border-radius: 4px;
+            padding: 1.5rem;
+        }
+
+        .config-output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .config-output-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f4f4f4;
+        }
+
+        .config-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #525252;
+            color: #c6c6c6;
+            padding: 0.5rem 1rem;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.1s;
+        }
+
+        .btn-secondary:hover {
+            background: #353535;
+            color: #f4f4f4;
+        }
+
+        .config-code-container {
+            background: #161616;
+            border: 1px solid #393939;
+            border-radius: 4px;
+            padding: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .config-code {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #78a9ff;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .config-code .key {
+            color: #ee5396;
+        }
+
+        .config-code .string {
+            color: #42be65;
+        }
+
+        .config-code .comment {
+            color: #8d8d8d;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #8d8d8d;
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #24a148;
+            color: #161616;
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            z-index: 10000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .toast.active {
+            display: flex;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bx--header">
+        <div class="header-content">
+            <div class="header-left">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <path d="M16 2L2 9L16 16L30 9L16 2Z" fill="#0f62fe"/>
+                    <path d="M2 23L16 30L30 23V9L16 16L2 9V23Z" fill="#0f62fe" opacity="0.6"/>
+                </svg>
+                <span class="header-title">IBM Instana</span>
+                <div class="breadcrumb">
+                    <a href="instana-data-optimization-ux.html">Account and billing</a>
+                    <span>/</span>
+                    <span>Configuration Generator</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Configuration Generator</h2>
+                <p>Create optimized agent configurations</p>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Documentation</div>
+                    <div class="nav-item">Java Docs</div>
+                    <div class="nav-item">Home</div>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Fair Use Policy</div>
+                    <div class="nav-item">Overview</div>
+                    <div class="nav-item">Span Annotations</div>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">JDBC</div>
+                    <div class="nav-item">Span Attribute Mapping</div>
+                    <div class="nav-item">Span Filtering Examples</div>
+                    <div class="nav-item active">Configuration Generator</div>
+                    <div class="nav-item">Data Savings Calculator</div>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Other Technologies</div>
+                    <div class="nav-item">OpenTelemetry</div>
+                    <div class="nav-item">MQ</div>
+                    <div class="nav-item">HTTP</div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <h1>Configuration Generator</h1>
+                <p>Generate optimized YAML configurations for your Instana agents based on your service's technology stack and optimization goals.</p>
+            </div>
+
+            <div class="content-body">
+                <!-- Info Banner -->
+                <div class="info-banner">
+                    <div class="info-banner-icon">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                            <path d="M16 2a14 14 0 1014 14A14 14 0 0016 2zm0 26a12 12 0 1112-12 12 12 0 01-12 12z"/>
+                            <path d="M15 10h2v2h-2zm0 4h2v8h-2z"/>
+                        </svg>
+                    </div>
+                    <div class="info-banner-content">
+                        <p><strong>Note:</strong> The fields and values in filters correspond to span annotations and their values. For a complete reference of available JDBC span annotations, see the <a href="#">JDBC Attribute Mapping</a> page.</p>
+                    </div>
+                </div>
+
+                <!-- Technology Selection -->
+                <div class="form-section">
+                    <h3>1. Select Technology</h3>
+                    <div class="form-group">
+                        <label class="form-label">Technology Stack</label>
+                        <select class="form-select" id="technologySelect" onchange="updatePresets()">
+                            <option value="">Select technology...</option>
+                            <option value="JDBC" selected>JDBC (Java Database Connectivity)</option>
+                            <option value="OpenTelemetry">OpenTelemetry</option>
+                            <option value="MQ">IBM MQ</option>
+                            <option value="HTTP">HTTP/REST</option>
+                        </select>
+                        <p class="form-help">Select the technology stack used by your service</p>
+                    </div>
+                </div>
+
+                <!-- Filter Mode -->
+                <div class="form-section">
+                    <h3>2. Define Filter Mode</h3>
+                    <div class="form-group">
+                        <label class="form-label">Filter Mode</label>
+                        <div class="filter-mode-options">
+                            <div class="radio-option">
+                                <input type="radio" id="excludeMode" name="filterMode" value="exclude" checked onchange="updateConfig()">
+                                <label for="excludeMode">Exclude Mode - Filter out matching spans</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="includeMode" name="filterMode" value="include" onchange="updateConfig()">
+                                <label for="includeMode">Include Mode - Keep only matching spans</label>
+                            </div>
+                        </div>
+                        <p class="form-help">Choose whether to exclude or include spans that match your filter criteria</p>
+                    </div>
+                </div>
+
+                <!-- Filter Presets -->
+                <div class="form-section">
+                    <h3>3. Choose Filter Preset (Optional)</h3>
+                    <p style="font-size: 14px; color: #c6c6c6; margin-bottom: 1rem;">
+                        Select a preset configuration or create custom filters below
+                    </p>
+                    <div class="preset-grid" id="presetGrid">
+                        <!-- Presets will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Custom Filters -->
+                <div class="form-section">
+                    <h3>4. Define Custom Filters</h3>
+                    <p style="font-size: 14px; color: #c6c6c6; margin-bottom: 1rem;">
+                        Create custom attribute filters to fine-tune your optimization
+                    </p>
+                    
+                    <div class="attribute-groups" id="attributeGroups">
+                        <div class="attribute-group">
+                            <div class="attribute-group-header">
+                                <input type="text" placeholder="Filter Group Name (e.g., JDBC Exclude)" value="JDBC Exclude">
+                                <button class="btn-icon" onclick="removeGroup(this)">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 32 32">
+                                        <path d="M12 12h2v8h-2zm6 0h2v8h-2z"/>
+                                        <path d="M4 6v2h2v16a2 2 0 002 2h16a2 2 0 002-2V8h2V6zm4 18V8h16v16z"/>
+                                        <path d="M12 2h8v2h-8z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="filter-row">
+                                <div class="form-group">
+                                    <label class="form-label">Field</label>
+                                    <select class="form-select">
+                                        <option value="">Select field...</option>
+                                        <option value="span.kind">span.kind</option>
+                                        <option value="db.system">db.system</option>
+                                        <option value="db.statement">db.statement</option>
+                                        <option value="span.duration">span.duration</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Operator</label>
+                                    <select class="form-select">
+                                        <option value="equals">equals</option>
+                                        <option value="contains">contains</option>
+                                        <option value="startsWith">starts with</option>
+                                        <option value="lessThan">less than</option>
+                                        <option value="greaterThan">greater than</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Value</label>
+                                    <input type="text" class="form-input" placeholder="Filter value">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" style="opacity: 0;">Action</label>
+                                    <button class="btn-icon">
+                                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 32 32">
+                                            <path d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4l6.6 6.6L8 22.6 9.4 24l6.6-6.6 6.6 6.6 1.4-1.4-6.6-6.6L24 9.4z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="form-help" style="margin-top: 0.5rem; font-style: italic;">No filters added yet.</p>
+                        </div>
+                    </div>
+
+                    <button class="btn-add" onclick="addAttributeGroup()">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 32 32">
+                            <path d="M17 15V8h-2v7H8v2h7v7h2v-7h7v-2h-7z"/>
+                        </svg>
+                        Add Attribute Group
+                    </button>
+                </div>
+
+                <!-- Configuration Output -->
+                <div class="config-output">
+                    <div class="config-output-header">
+                        <h3>Generated Configuration (YAML)</h3>
+                        <div class="config-actions">
+                            <button class="btn-secondary" onclick="downloadConfig()">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 32 32">
+                                    <path d="M26 24v4H6v-4H4v4a2 2 0 002 2h20a2 2 0 002-2v-4z"/>
+                                    <path d="M26 14l-1.41-1.41L17 20.17V2h-2v18.17l-7.59-7.58L6 14l10 10 10-10z"/>
+                                </svg>
+                                Download
+                            </button>
+                            <button class="btn-secondary" onclick="copyConfig()">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 32 32">
+                                    <path d="M28 10v18H10V10h18m0-2H10a2 2 0 00-2 2v18a2 2 0 002 2h18a2 2 0 002-2V10a2 2 0 00-2-2z"/>
+                                    <path d="M4 18H2V4a2 2 0 012-2h14v2H4z"/>
+                                </svg>
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+                    <div class="config-code-container">
+                        <pre class="config-code" id="configOutput">com.instana.tracing:
+  filters:
+    exclude:
+      - name: "JDBC Filter"
+        attributes:
+          - key: "span.kind"
+            value: "exit"
+          - key: "db.system"
+            value: "jdbc"
+          - key: "span.duration"
+            operator: "lessThan"
+            value: "100ms"</pre>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+            <path d="M16 2a14 14 0 1014 14A14 14 0 0016 2zm0 26a12 12 0 1112-12 12 12 0 01-12 12z"/>
+            <path d="M14 21.5l-5-5 1.4-1.4 3.6 3.6 7.6-7.6L23 12.5z"/>
+        </svg>
+        <span id="toastMessage">Configuration copied to clipboard!</span>
+    </div>
+
+    <script>
+        // Parse URL parameters on page load
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                service: params.get('service'),
+                technology: params.get('technology'),
+                framework: params.get('framework'),
+                usage: params.get('usage')
+            };
+        }
+
+        // Initialize page with URL parameters
+        function initializePage() {
+            const params = getUrlParams();
+            
+            if (params.service && params.framework) {
+                // Show service info banner
+                document.getElementById('serviceInfoBanner').style.display = 'flex';
+                document.getElementById('infoServiceName').textContent = params.service;
+                document.getElementById('infoTechnology').textContent = params.technology || '-';
+                document.getElementById('infoFramework').textContent = params.framework;
+                document.getElementById('infoUsage').textContent = params.usage ? `${params.usage}%` : '-';
+                
+                // Pre-select technology
+                const techSelect = document.getElementById('technologySelect');
+                techSelect.value = params.framework;
+                
+                // Update presets based on selected technology
+                updatePresets();
+                
+                // Update page title
+                document.querySelector('.content-header h1').textContent = `Configuration Generator - ${params.service}`;
+            }
+        }
+
+        const presetData = {
+            'JDBC': [
+                {
+                    id: 'jdbc-slow-query',
+                    title: 'Exclude Slow Queries',
+                    description: 'Filter out JDBC spans with execution time below 100ms',
+                    reduction: '30-40%'
+                },
+                {
+                    id: 'jdbc-select',
+                    title: 'Exclude SELECT Queries',
+                    description: 'Filter out read-only SELECT queries',
+                    reduction: '40-50%'
+                },
+                {
+                    id: 'jdbc-health',
+                    title: 'Exclude Health Checks',
+                    description: 'Filter out database health check queries',
+                    reduction: '15-25%'
+                }
+            ],
+            'OpenTelemetry': [
+                {
+                    id: 'otel-health',
+                    title: 'Filter Health Endpoints',
+                    description: 'Exclude /health, /ready, /live endpoints',
+                    reduction: '20-30%'
+                },
+                {
+                    id: 'otel-static',
+                    title: 'Filter Static Assets',
+                    description: 'Exclude requests for static files (CSS, JS, images)',
+                    reduction: '25-35%'
+                }
+            ],
+            'MQ': [
+                {
+                    id: 'mq-empty',
+                    title: 'Filter Empty Messages',
+                    description: 'Exclude empty or heartbeat messages',
+                    reduction: '25-35%'
+                }
+            ]
+        };
+
+        function updatePresets() {
+            const technology = document.getElementById('technologySelect').value;
+            const presetGrid = document.getElementById('presetGrid');
+            
+            if (!technology || !presetData[technology]) {
+                presetGrid.innerHTML = '<div class="empty-state"><p>Select a technology to view available presets</p></div>';
+                return;
+            }
+
+            const presets = presetData[technology];
+            presetGrid.innerHTML = presets.map(preset => `
+                <div class="preset-card" onclick="selectPreset('${preset.id}', '${technology}')">
+                    <h4>${preset.title}</h4>
+                    <p>${preset.description}</p>
+                    <span class="preset-badge">Saves ${preset.reduction}</span>
+                </div>
+            `).join('');
+        }
+
+        function selectPreset(presetId, technology) {
+            document.querySelectorAll('.preset-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            
+            // Update configuration based on preset
+            updateConfig();
+        }
+
+        function updateConfig() {
+            // This would generate the actual YAML based on selections
+            // For now, keeping the default example
+        }
+
+        function addAttributeGroup() {
+            const container = document.getElementById('attributeGroups');
+            const newGroup = document.createElement('div');
+            newGroup.className = 'attribute-group';
+            newGroup.innerHTML = `
+                <div class="attribute-group-header">
+                    <input type="text" placeholder="Filter Group Name">
+                    <button class="btn-icon" onclick="removeGroup(this)">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 32 32">
+                            <path d="M12 12h2v8h-2zm6 0h2v8h-2z"/>
+                            <path d="M4 6v2h2v16a2 2 0 002 2h16a2 2 0 002-2V8h2V6zm4 18V8h16v16z"/>
+                            <path d="M12 2h8v2h-8z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="filter-row">
+                    <div class="form-group">
+                        <label class="form-label">Field</label>
+                        <select class="form-select">
+                            <option value="">Select field...</option>
+                            <option value="span.kind">span.kind</option>
+                            <option value="db.system">db.system</option>
+                            <option value="db.statement">db.statement</option>
+                            <option value="span.duration">span.duration</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Operator</label>
+                        <select class="form-select">
+                            <option value="equals">equals</option>
+                            <option value="contains">contains</option>
+                            <option value="startsWith">starts with</option>
+                            <option value="lessThan">less than</option>
+                            <option value="greaterThan">greater than</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Value</label>
+                        <input type="text" class="form-input" placeholder="Filter value">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" style="opacity: 0;">Action</label>
+                        <button class="btn-icon">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 32 32">
+                                <path d="M24 9.4L22.6 8 16 14.6 9.4 8 8 9.4l6.6 6.6L8 22.6 9.4 24l6.6-6.6 6.6 6.6 1.4-1.4-6.6-6.6L24 9.4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <p class="form-help" style="margin-top: 0.5rem; font-style: italic;">No filters added yet.</p>
+            `;
+            container.appendChild(newGroup);
+        }
+
+        function removeGroup(button) {
+            button.closest('.attribute-group').remove();
+        }
+
+        function copyConfig() {
+            const configText = document.getElementById('configOutput').textContent;
+            navigator.clipboard.writeText(configText).then(() => {
+                showToast('Configuration copied to clipboard!');
+            });
+        }
+
+        function downloadConfig() {
+            const configText = document.getElementById('configOutput').textContent;
+            const blob = new Blob([configText], { type: 'text/yaml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'instana-agent-config.yaml';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Configuration downloaded!');
+        }
+
+        function applyToInstana() {
+            const configText = document.getElementById('configOutput').textContent;
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(configText).then(() => {
+                showToast('Configuration copied! Redirecting to Instana...');
+                
+                // Simulate applying to Instana (in real implementation, this would call an API)
+                setTimeout(() => {
+                    // Redirect back to the main page
+                    window.location.href = 'instana-data-optimization-ux.html';
+                }, 2000);
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.add('active');
+            
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+
+        // Initialize page on load
+        window.addEventListener('DOMContentLoaded', () => {
+            initializePage();
+        });
+    </script>
+</body>
+</html>

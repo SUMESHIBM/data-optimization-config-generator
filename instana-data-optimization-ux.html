@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account and billing - IBM Instana</title>
+    <link rel="stylesheet" href="https://unpkg.com/carbon-components@10.58.0/css/carbon-components.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: #ffffff;
+            color: #161616;
+        }
+
+        /* Header */
+        .header {
+            background: #161616;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            border-bottom: 1px solid #393939;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-title {
+            color: #f4f4f4;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-icon {
+            color: #f4f4f4;
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Layout */
+        .main-container {
+            display: flex;
+            height: calc(100vh - 48px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 48px;
+            background: #262626;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 0;
+            gap: 0.5rem;
+        }
+
+        .sidebar-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c6c6c6;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background 0.1s;
+        }
+
+        .sidebar-icon:hover {
+            background: #393939;
+            color: #f4f4f4;
+        }
+
+        .sidebar-icon.active {
+            background: #393939;
+            color: #0f62fe;
+        }
+
+        /* Content */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            background: #f4f4f4;
+        }
+
+        .content-header {
+            background: #ffffff;
+            padding: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .content-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 0.75rem 0;
+            color: #525252;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-size: 14px;
+            transition: all 0.1s;
+            position: relative;
+            bottom: -1px;
+        }
+
+        .tab:hover {
+            color: #161616;
+        }
+
+        .tab.active {
+            color: #0f62fe;
+            border-bottom-color: #0f62fe;
+        }
+
+        /* Content Body */
+        .content-body {
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #161616;
+            margin-bottom: 1rem;
+        }
+
+        /* Info Section */
+        .info-section {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .info-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #161616;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .info-item h4 {
+            font-size: 12px;
+            font-weight: 600;
+            color: #525252;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-item p {
+            font-size: 14px;
+            color: #161616;
+            line-height: 1.5;
+        }
+
+        .info-item a {
+            color: #0f62fe;
+            text-decoration: none;
+        }
+
+        .info-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Unit Selector */
+        .unit-selector {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .unit-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .unit-label {
+            font-size: 14px;
+            color: #525252;
+        }
+
+        .unit-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #161616;
+        }
+
+        .switch-tenant {
+            color: #0f62fe;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .switch-tenant:hover {
+            text-decoration: underline;
+        }
+
+        .time-range-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .time-range-label {
+            font-size: 14px;
+            color: #525252;
+        }
+
+        .time-range-select {
+            background: #ffffff;
+            border: none;
+            border-bottom: 1px solid #8d8d8d;
+            padding: 0.5rem 2rem 0.5rem 0.5rem;
+            font-size: 14px;
+            color: #161616;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%23161616' d='M8 11L3 6l.7-.7L8 9.6l4.3-4.3.7.7z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+        }
+
+        .time-range-select:focus {
+            outline: none;
+            border-bottom-color: #0f62fe;
+        }
+
+        /* Table Section */
+        .table-section {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+
+        .table-header-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .table-header-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #161616;
+            margin-bottom: 0.5rem;
+        }
+
+        .table-header-section p {
+            font-size: 14px;
+            color: #525252;
+            line-height: 1.5;
+        }
+
+        /* Search */
+        .search-container {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .search-input {
+            width: 100%;
+            max-width: 400px;
+            background: #f4f4f4;
+            border: none;
+            border-bottom: 1px solid #8d8d8d;
+            padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+            font-size: 14px;
+            color: #161616;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%23525252' d='M15 14.3L10.7 10c.9-1.2 1.5-2.7 1.5-4.2 0-3.7-3-6.8-6.7-6.8S-1.2 2.1-1.2 5.8s3 6.8 6.7 6.8c1.5 0 2.9-.5 4-1.3l4.3 4.3.7-.7zM5.5 11.5c-3.2 0-5.8-2.6-5.8-5.8S2.3 0 5.5 0s5.8 2.6 5.8 5.8-2.6 5.7-5.8 5.7z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 0.5rem center;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-bottom-color: #0f62fe;
+        }
+
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: #f4f4f4;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            font-size: 12px;
+            font-weight: 600;
+            color: #161616;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .data-table td {
+            padding: 1rem 1.5rem;
+            font-size: 14px;
+            color: #161616;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f4f4f4;
+        }
+
+        .service-link {
+            color: #0f62fe;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .service-link:hover {
+            text-decoration: underline;
+        }
+
+        .view-details-link {
+            color: #0f62fe;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .view-details-link:hover {
+            text-decoration: underline;
+        }
+
+        .view-optimization-link {
+            color: #0f62fe;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .view-optimization-link:hover {
+            text-decoration: underline;
+        }
+
+        .view-optimization-link svg {
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <span class="header-title">IBM Instana</span>
+        </div>
+        <div class="header-right">
+            <div class="header-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M26 24v4H6v-4H4v4a2 2 0 002 2h20a2 2 0 002-2v-4z"/>
+                    <path d="M26 14l-1.41-1.41L17 20.17V2h-2v18.17l-7.59-7.58L6 14l10 10 10-10z"/>
+                </svg>
+            </div>
+            <div class="header-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M16 4a5 5 0 11-5 5 5 5 0 015-5m0-2a7 7 0 107 7 7 7 0 00-7-7zM26 30h-2v-5a5 5 0 00-5-5h-6a5 5 0 00-5 5v5H6v-5a7 7 0 017-7h6a7 7 0 017 7z"/>
+                </svg>
+            </div>
+            <div class="header-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <circle cx="16" cy="16" r="2"/>
+                    <circle cx="6" cy="16" r="2"/>
+                    <circle cx="26" cy="16" r="2"/>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M16 18H6a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2zM6 6v10h10V6zm20 12h-10a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2zM16 6v10h10V6zM16 28H6a2 2 0 01-2-2V16a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2zM6 16v10h10V16z"/>
+                </svg>
+            </div>
+            <div class="sidebar-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M28 4H4a2 2 0 00-2 2v20a2 2 0 002 2h24a2 2 0 002-2V6a2 2 0 00-2-2zM4 6h24v4H4V6zm0 20V12h24v14H4z"/>
+                </svg>
+            </div>
+            <div class="sidebar-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M16 4a12 12 0 1012 12A12 12 0 0016 4zm0 22a10 10 0 1110-10 10 10 0 01-10 10z"/>
+                    <path d="M17 11h-2v6h6v-2h-4V11z"/>
+                </svg>
+            </div>
+            <div class="sidebar-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M21 2h-2v6h2V2zm-4 4h-2v4h2V6zm-4 2h-2v6h2V8zM9 6H7v8h2V6zm16 4h-2v8h2v-8zm-4 4h-2v8h2v-8zm-4 2h-2v8h2v-8zm-4 2H9v8h2v-8z"/>
+                </svg>
+            </div>
+            <div class="sidebar-icon active">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M26 4H6a2 2 0 00-2 2v20a2 2 0 002 2h20a2 2 0 002-2V6a2 2 0 00-2-2zM6 6h20v4H6V6zm0 20V12h20v14H6z"/>
+                    <path d="M10 16h4v2h-4zm6 0h6v2h-6zm-6 4h6v2h-6zm8 0h4v2h-4z"/>
+                </svg>
+            </div>
+            <div class="sidebar-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M22 16h2v6h-2zm-4-4h2v10h-2zm-4-2h2v12h-2zm-4 6h2v6h-2z"/>
+                </svg>
+            </div>
+            <div class="sidebar-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M16 2L2 9v14l14 7 14-7V9L16 2zm0 2.828L26.234 9 16 13.172 5.766 9 16 4.828zM4 10.828l11 5.5v11.344l-11-5.5V10.828zm13 16.844V16.328l11-5.5v11.344l-11 5.5z"/>
+                </svg>
+            </div>
+            <div class="sidebar-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M12 4a5 5 0 11-5 5 5 5 0 015-5m0-2a7 7 0 107 7 7 7 0 00-7-7zm10 28h-2v-5a5 5 0 00-5-5H5a5 5 0 00-5 5v5H0v-5a7 7 0 017-7h10a7 7 0 017 7z"/>
+                </svg>
+            </div>
+            <div class="sidebar-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M27 22.141V18a2 2 0 00-2-2h-8v-4h2a2.002 2.002 0 002-2V4a2.002 2.002 0 00-2-2h-6a2.002 2.002 0 00-2 2v6a2.002 2.002 0 002 2h2v4H7a2 2 0 00-2 2v4.142a4 4 0 102 0V18h8v4.142a4 4 0 102 0V18h8v4.141a4 4 0 102 0zM13 4h6l.001 6H13zM8 26a2 2 0 11-2-2 2.002 2.002 0 012 2zm10 0a2 2 0 11-2-2 2.003 2.003 0 012 2zm8 2a2 2 0 112-2 2.002 2.002 0 01-2 2z"/>
+                </svg>
+            </div>
+            <div class="sidebar-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M30 8h-4.1c-.5-2.3-2.5-4-4.9-4s-4.4 1.7-4.9 4H2v2h14.1c.5 2.3 2.5 4 4.9 4s4.4-1.7 4.9-4H30V8zm-9 4c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3zm-10 4c-2.4 0-4.4 1.7-4.9 4H2v2h4.1c.5 2.3 2.5 4 4.9 4s4.4-1.7 4.9-4H30v-2H15.9c-.5-2.3-2.5-4-4.9-4zm0 8c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"/>
+                </svg>
+            </div>
+            <div class="sidebar-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M28 4H4a2 2 0 00-2 2v14a2 2 0 002 2h8v6H8v2h16v-2h-4v-6h8a2 2 0 002-2V6a2 2 0 00-2-2zM18 28h-4v-6h4zm10-8H4V6h24z"/>
+                </svg>
+            </div>
+            <div class="sidebar-icon">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M16 8a5 5 0 11-5 5 5 5 0 015-5m0-2a7 7 0 107 7 7 7 0 00-7-7z"/>
+                    <path d="M26 30h-2v-5a5 5 0 00-5-5h-6a5 5 0 00-5 5v5H6v-5a7 7 0 017-7h6a7 7 0 017 7z"/>
+                </svg>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <div class="content-title">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 32 32">
+                        <path d="M26 4H6a2 2 0 00-2 2v20a2 2 0 002 2h20a2 2 0 002-2V6a2 2 0 00-2-2zM6 6h20v4H6V6zm0 20V12h20v14H6z"/>
+                        <path d="M10 16h4v2h-4zm6 0h6v2h-6zm-6 4h6v2h-6zm8 0h4v2h-4z"/>
+                    </svg>
+                    Account and billing
+                </div>
+                <div class="tabs">
+                    <div class="tab active">Usage</div>
+                    <div class="tab">Licenses</div>
+                    <div class="tab">Activation & adoption</div>
+                    <div class="tab">Technologies reporting</div>
+                    <div class="tab">Account information</div>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <div class="section-title">Usage</div>
+
+                <!-- Info Section -->
+                <div class="info-section">
+                    <div class="info-section-header">
+                        <div class="info-section-title">Learn more about data granularity</div>
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 32 32">
+                            <path d="M16 22L6 12l1.4-1.4 8.6 8.6 8.6-8.6L26 12z"/>
+                        </svg>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <h4>What do the consumption values represent?</h4>
+                            <p>Instana's Fair Use Policy outlines the monthly data allowance associated with your license type. To learn more about data usage guidelines, check out the <a href="#">Fair Use Policy documentation</a>.</p>
+                        </div>
+                        <div class="info-item">
+                            <h4>How do I take action?</h4>
+                            <p>Learn more about how data usage and optimization works from an expert <a href="#">here</a>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unit Selector -->
+                <div class="unit-selector">
+                    <div class="unit-info">
+                        <span class="unit-label">Unit</span>
+                        <span class="unit-value">demo-us</span>
+                        <a href="#" class="switch-tenant">
+                            Switch tenant
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 32 32">
+                                <path d="M18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10L18 6z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="time-range-selector">
+                        <span class="time-range-label">Time range</span>
+                        <select class="time-range-select">
+                            <option>This month</option>
+                            <option>Last month</option>
+                            <option>Last 3 months</option>
+                            <option>Last 6 months</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Traces Table -->
+                <div class="table-section">
+                    <div class="table-header-section">
+                        <h3>Traces</h3>
+                        <p>You can find services with the highest data consumption below. You can search and filter this view to get insights on services you are most interested in.</p>
+                    </div>
+                    <div class="search-container">
+                        <input type="text" class="search-input" placeholder="Search input text">
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Service name</th>
+                                <th>Percentage of usage</th>
+                                <th></th>
+                                <th>Optimizations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="#" class="service-link">apiconnect</a></td>
+                                <td>44%</td>
+                                <td><a href="#" class="view-details-link">View details</a></td>
+                                <td>
+                                    <a href="configuration-generator.html?service=apiconnect&technology=Java&framework=JDBC&usage=44" class="view-optimization-link">
+                                        View Optimizations
+                                        <svg fill="currentColor" viewBox="0 0 32 32">
+                                            <path d="M18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10L18 6z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" class="service-link">qotd-web</a></td>
+                                <td>22%</td>
+                                <td><a href="#" class="view-details-link">View details</a></td>
+                                <td>
+                                    <a href="configuration-generator.html?service=qotd-web&technology=Node.js&framework=OpenTelemetry&usage=22" class="view-optimization-link">
+                                        View Optimizations
+                                        <svg fill="currentColor" viewBox="0 0 32 32">
+                                            <path d="M18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10L18 6z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" class="service-link">bankui</a></td>
+                                <td>11%</td>
+                                <td><a href="#" class="view-details-link">View details</a></td>
+                                <td>
+                                    <a href="configuration-generator.html?service=bankui&technology=React&framework=HTTP&usage=11" class="view-optimization-link">
+                                        View Optimizations
+                                        <svg fill="currentColor" viewBox="0 0 32 32">
+                                            <path d="M18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10L18 6z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" class="service-link">qotd-datapower</a></td>
+                                <td>9%</td>
+                                <td><a href="#" class="view-details-link">View details</a></td>
+                                <td>
+                                    <a href="configuration-generator.html?service=qotd-datapower&technology=Java&framework=MQ&usage=9" class="view-optimization-link">
+                                        View Optimizations
+                                        <svg fill="currentColor" viewBox="0 0 32 32">
+                                            <path d="M18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10L18 6z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" class="service-link">corebanking</a></td>
+                                <td>5%</td>
+                                <td><a href="#" class="view-details-link">View details</a></td>
+                                <td>
+                                    <a href="configuration-generator.html?service=corebanking&technology=Java&framework=JDBC&usage=5" class="view-optimization-link">
+                                        View Optimizations
+                                        <svg fill="currentColor" viewBox="0 0 32 32">
+                                            <path d="M18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10L18 6z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" class="service-link">authentication</a></td>
+                                <td>4%</td>
+                                <td><a href="#" class="view-details-link">View details</a></td>
+                                <td>
+                                    <a href="configuration-generator.html?service=authentication&technology=Java&framework=JDBC&usage=4" class="view-optimization-link">
+                                        View Optimizations
+                                        <svg fill="currentColor" viewBox="0 0 32 32">
+                                            <path d="M18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10L18 6z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" class="service-link">frontend</a></td>
+                                <td>3%</td>
+                                <td><a href="#" class="view-details-link">View details</a></td>
+                                <td>
+                                    <a href="configuration-generator.html?service=frontend&technology=React&framework=HTTP&usage=3" class="view-optimization-link">
+                                        View Optimizations
+                                        <svg fill="currentColor" viewBox="0 0 32 32">
+                                            <path d="M18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10L18 6z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" class="service-link">fraud</a></td>
+                                <td>2%</td>
+                                <td><a href="#" class="view-details-link">View details</a></td>
+                                <td>
+                                    <a href="configuration-generator.html?service=fraud&technology=Python&framework=HTTP&usage=2" class="view-optimization-link">
+                                        View Optimizations
+                                        <svg fill="currentColor" viewBox="0 0 32 32">
+                                            <path d="M18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10L18 6z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" class="service-link">notification</a></td>
+                                <td>1.5%</td>
+                                <td><a href="#" class="view-details-link">View details</a></td>
+                                <td>
+                                    <a href="configuration-generator.html?service=notification&technology=Node.js&framework=OpenTelemetry&usage=1.5" class="view-optimization-link">
+                                        View Optimizations
+                                        <svg fill="currentColor" viewBox="0 0 32 32">
+                                            <path d="M18 6l-1.43 1.393L24.15 15H4v2h20.15l-7.58 7.573L18 26l10-10L18 6z"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" class="service-link">Other</a></td>
+                                <td>--</td>
+                                <td><a href="#" class="view-details-link">View details</a></td>
+                                <td>--</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
