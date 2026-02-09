@@ -18,7 +18,7 @@ The main Account and Billing page that displays:
 - Technology stack identification
 - Direct links to optimization configurations
 
-**Live Demo:** [View Account & Billing Page](https://sumeshsomarajan.github.io/data-optimization-config-generator/instana-data-optimization-ux.html)
+**Live Demo:** [View Account & Billing Page](https://sumeshibm.github.io/data-optimization-config-generator/instana-data-optimization-ux.html)
 
 ### 2. **configuration-generator.html**
 The Configuration Generator interface that provides:
@@ -28,7 +28,7 @@ The Configuration Generator interface that provides:
 - Real-time YAML generation
 - One-click apply to Instana
 
-**Live Demo:** [View Configuration Generator](https://sumeshsomarajan.github.io/data-optimization-config-generator/configuration-generator.html)
+**Live Demo:** [View Configuration Generator](https://sumeshibm.github.io/data-optimization-config-generator/configuration-generator.html?service=qotd-web&technology=Node.js&framework=OpenTelemetry&usage=22)
 
 ### 3. **product-requirements-data-optimization-ux.md**
 Complete Product Requirements Document including:
